@@ -1,13 +1,28 @@
 [![Build Status](https://travis-ci.com/sweet-delights/delightful-anonymization.svg?branch=master)](https://travis-ci.com/sweet-delights/delightful-edifact)
+[![Maven Central](https://img.shields.io/maven-central/v/org.sweet-delights/delightful-anonymization_2.13.svg)](https://maven-badges.herokuapp.com/maven-central/org.sweet-delights/delightful-anonymization_2.13)
 
 `delightful-anonymization` is a library for anonymizing case classes on-the-fly.
 
-# [License](LICENSE.md)
+This library is built for Scala 2.12.12 and 2.13.3
+
+### SBT
+```scala
+libraryDependencies += "org.sweet-delights" %% "delightful-anonymization" % "0.0.1"
+```
+
+### Maven
+```xml
+<dependency>
+  <groupId>org.sweet-delights</groupId>
+  <artifactId>delightful-anonymization_2.12</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+## [License](LICENSE.md)
 
 All files in `delightful-anonymization` are under the GNU Lesser General Public License version 3.
 Please read files [`COPYING`](COPYING) and [`COPYING.LESSER`](COPYING.LESSER) for details.
-
-# Introduction
 
 ## How to anonymize a case class ?
 
@@ -34,13 +49,12 @@ val foo = Foo(
   1
 )
 
-val anonymized = foo.anonymize
-println(anonymized)
-//Foo(
-//  opt = Some("A9WeZjwa+awzqZSdEZNQWg=="),
-//  str = "Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
-//  integer = 1
-//)
+val anonymized == Foo(
+  opt = Some("A9WeZjwa+awzqZSdEZNQWg=="),
+  str = "Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
+  integer = 1
+)
+//> true
 ```
 
 ## Supported types
