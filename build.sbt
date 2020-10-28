@@ -2,7 +2,19 @@ import java.util.regex.Pattern
 import sbt.Keys.scalacOptions
 
 name := "delightful-anonymization"
-organization := "sweet-delights"
+organization := "org.sweet-delights"
+homepage := Option(url("https://github.com/sweet-delights/delightful-anonymization"))
+licenses := List("GNU Lesser General Public License Version 3" -> url("https://www.gnu.org/licenses/lgpl-3.0.txt"))
+description := "delightful-anonymization is a Scala library for anonymizing case classes"
+scmInfo := Option(ScmInfo(url("https://github.com/sweet-delights/delightful-anonymization"), "scm:git@github.com:sweet-delights/delightful-anonymization.git"))
+developers := List(
+  Developer(
+    id = "pgrandjean",
+    name = "Patrick Grandjean",
+    email = "pgrandjean.github.com@gmail.com",
+    url = url("https://github.com/pgrandjean")
+  )
+)
 scalaVersion := "2.12.12"
 crossScalaVersions := Seq("2.12.12", "2.13.3")
 checksums in update := Nil
@@ -24,7 +36,14 @@ javacOptions in Compile ++= Seq(
   "1.8"
 )
 scalafmtOnCompile in ThisBuild := true
-
+publishMavenStyle := true
+publishTo := Some {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    "snapshots" at nexus + "content/repositories/snapshots"
+  else
+    "releases" at nexus + "service/local/staging/deploy/maven2"
+}
 // sbt-release
 import sbtrelease._
 import ReleaseTransformations._
@@ -50,13 +69,14 @@ majorRegexes := List(s"${Pattern.quote("[major]")}.*").map(_.r)
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
+  runClean,
+  runTest,
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
-  runClean,
-  runTest,
-  publishArtifacts,
+  releaseStepCommandAndRemaining("+publishSigned"),
   setNextVersion,
   commitNextVersion,
+  releaseStepCommand("sonatypeRelease"),
   pushChanges
 )
