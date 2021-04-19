@@ -37,10 +37,13 @@ object Hashable {
   implicit lazy val bytesWithSHA512: Hashable[Array[Byte], Hash.SHA512.type] = (t: Array[Byte]) => hashArray(Hash.SHA512.name)(t)
 
   // hash third-party type T by transforming T into a hashable type U with hashing H
-  implicit def usingInjection[T, U, H <: Hash](implicit injection: Injection[T, U], hashable: Hashable[U, H]): Hashable[T, H] = (t: T) => {
-    val u = injection(t)
-    val hashed = hashable.hash(u)
-    injection.invert(hashed)
+  implicit def usingInjection[T, U, H <: Hash](implicit injection: Injection[T, U], hashable: Hashable[U, H]): Hashable[T, H] = { t: T =>
+    if (injection.isAnonymized(t)) t
+    else {
+      val u = injection(t)
+      val hashed = hashable.hash(u)
+      injection.invert(hashed)
+    }
   }
 
   implicit def optionWithAnyHash[T, H <: Hash](implicit hashable: Hashable[T, H]): Hashable[Option[T], H] =

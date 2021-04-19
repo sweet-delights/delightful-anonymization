@@ -39,18 +39,26 @@ class AnonymizerSpec extends Specification {
       val anonymized = foo.anonymize
       anonymized mustNotEqual foo
       anonymized mustEqual Foo(
-        opt = Some("A9WeZjwa+awzqZSdEZNQWg=="),
-        str = "Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
+        opt = Some("@-A9WeZjwa+awzqZSdEZNQWg=="),
+        str = "@-Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
         integer = 1,
         more = Some(
           Bar(
             list = List(
-              "WeF0h3dEjGnea4ANejO7+5/xtGPkQ1TDVTvNucZm+pASWjx5+QOXvfX2oT3oKGhP",
-              "pNECuyo5tvHZ5IHvGha4lIoN8rWU/QMbrW8gH71rBlaEam5Yowqlf/NNkS59PqGF"
+              "@-WeF0h3dEjGnea4ANejO7+5/xtGPkQ1TDVTvNucZm+pASWjx5+QOXvfX2oT3oKGhP",
+              "@-pNECuyo5tvHZ5IHvGha4lIoN8rWU/QMbrW8gH71rBlaEam5Yowqlf/NNkS59PqGF"
             )
           )
         )
       )
+    }
+
+    "idempotence" in {
+      import Anonymizer._
+      val anonymized = foo.anonymize
+      val anonymized2 = anonymized.anonymize
+      anonymized mustNotEqual foo
+      anonymized2 mustEqual anonymized
     }
   }
 }

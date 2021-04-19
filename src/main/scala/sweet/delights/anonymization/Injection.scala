@@ -26,14 +26,19 @@ import org.apache.commons.codec.binary.Base64
   * @tparam U a hashable type U
   */
 trait Injection[T, U] {
+  def isAnonymized(t: T): Boolean
   def apply(t: T): U
   def invert(u: U): T
 }
 
 object Injection {
+
+  lazy val anonymizedPrefix = "@-"
+
   // converts a string into an array of bytes, the default data structure
   implicit lazy val stringInjection: Injection[String, Array[Byte]] = new Injection[String, Array[Byte]] {
+    override def isAnonymized(t: String): Boolean = t.startsWith(anonymizedPrefix)
     override def apply(t: String): Array[Byte] = t.getBytes("UTF-8")
-    override def invert(u: Array[Byte]): String = Base64.encodeBase64String(u)
+    override def invert(u: Array[Byte]): String = anonymizedPrefix + Base64.encodeBase64String(u)
   }
 }

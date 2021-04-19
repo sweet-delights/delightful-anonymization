@@ -50,8 +50,8 @@ val foo = Foo(
 )
 
 val anonymized == Foo(
-  opt = Some("A9WeZjwa+awzqZSdEZNQWg=="),
-  str = "Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
+  opt = Some("@-A9WeZjwa+awzqZSdEZNQWg=="),
+  str = "@-Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
   integer = 1
 )
 //> true
@@ -70,11 +70,20 @@ For example, support for strings is added with the following:
 import sweet.delights.anonymization.Injection
 import org.apache.commons.codec.binary.Base64
 
+lazy val anonymizedPrefix = "@:"
+
 implicit lazy val stringInjection: Injection[String, Array[Byte]] = new Injection[String, Array[Byte]] {
+  override def isAnonymized(t: String): Boolean = t.startsWith(anonymizedPrefix)
   override def apply(t: String): Array[Byte] = t.getBytes("UTF-8")
-  override def invert(u: Array[Byte]): String = Base64.encodeBase64String(u)
+  override def invert(u: Array[Byte]): String = anonymizedPrefix + Base64.encodeBase64String(u)
 }
 ```
+
+Comments:
+- idempotence is achieved by calling the `isAnonymized` function. If it returns true then the value `t` is not
+  re-hashed. Otherwise the specified hashing algorithm is applied. 
+- it is up to the user to decide which injections are to be idempotent or not
+- the default hashing implementation of strings is idempotent
 
 ## Supported hashing algorithms
 
