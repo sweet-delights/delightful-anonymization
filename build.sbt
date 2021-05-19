@@ -15,14 +15,14 @@ developers := List(
     url = url("https://github.com/pgrandjean")
   )
 )
-scalaVersion := "2.12.12"
-crossScalaVersions := Seq("2.12.12", "2.13.3")
+scalaVersion := "2.12.13"
+crossScalaVersions := Seq("2.12.12", "2.13.6")
 checksums in update := Nil
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
-  "commons-codec"  % "commons-codec" % "1.9",
+  "commons-codec"  % "commons-codec" % "1.15",
   "com.chuusai"    %% "shapeless"    % "2.3.7",
-  "org.specs2"     %% "specs2-core"  % "4.5.1" % "test"
+  "org.specs2"     %% "specs2-core"  % "4.11.0" % "test"
 )
 scalacOptions ++= Seq(
   "-deprecation",
