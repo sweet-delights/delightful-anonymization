@@ -15,8 +15,8 @@ developers := List(
     url = url("https://github.com/pgrandjean")
   )
 )
-scalaVersion := "2.12.12"
-crossScalaVersions := Seq("2.12.12", "2.13.3")
+scalaVersion := "2.12.13"
+crossScalaVersions := Seq("2.12.13", "2.13.3")
 checksums in update := Nil
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
