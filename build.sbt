@@ -21,7 +21,7 @@ checksums in update := Nil
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
   "commons-codec"  % "commons-codec" % "1.9",
-  "com.chuusai"    %% "shapeless"    % "2.3.3",
+  "com.chuusai"    %% "shapeless"    % "2.3.7",
   "org.specs2"     %% "specs2-core"  % "4.5.1" % "test"
 )
 scalacOptions ++= Seq(
