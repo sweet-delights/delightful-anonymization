@@ -3,7 +3,7 @@
 
 `delightful-anonymization` is a library for anonymizing case classes on-the-fly.
 
-This library is built for Scala 2.12.12 and 2.13.3
+This library is built for Scala 2.12 and 2.13.
 
 ### SBT
 ```scala
