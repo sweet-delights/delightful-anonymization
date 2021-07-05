@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
   "commons-codec"  % "commons-codec" % "1.15",
   "com.chuusai"    %% "shapeless"    % "2.3.7",
-  "org.specs2"     %% "specs2-core"  % "4.12.2" % "test"
+  "org.specs2"     %% "specs2-core"  % "4.12.3" % "test"
 )
 scalacOptions ++= Seq(
   "-deprecation",
