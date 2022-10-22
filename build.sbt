@@ -16,13 +16,13 @@ developers := List(
   )
 )
 scalaVersion := "2.12.17"
-crossScalaVersions := Seq("2.12.17", "2.13.8")
+crossScalaVersions := Seq("2.12.17", "2.13.10")
 checksums in update := Nil
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
   "commons-codec"  % "commons-codec" % "1.15",
   "com.chuusai"    %% "shapeless"    % "2.3.9",
-  "org.specs2"     %% "specs2-core"  % "4.15.0" % "test"
+  "org.specs2"     %% "specs2-core"  % "4.17.0" % "test"
 )
 scalacOptions ++= Seq(
   "-deprecation",
