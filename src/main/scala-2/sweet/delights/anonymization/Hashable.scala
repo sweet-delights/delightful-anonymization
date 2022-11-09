@@ -15,18 +15,20 @@
 package sweet.delights.anonymization
 
 /**
-  * Hashable represents a type T hashable with hashing algorithm H.
-  *
-  * @tparam T a type to be hashed
-  * @tparam H a hashing algorithm
-  */
+ * Hashable represents a type T hashable with hashing algorithm H.
+ *
+ * @tparam T
+ *   a type to be hashed
+ * @tparam H
+ *   a hashing algorithm
+ */
 trait Hashable[T, H <: Hash] {
   def hash(t: T): T
 }
 
 /**
-  * Hashable companion object.
-  */
+ * Hashable companion object.
+ */
 object Hashable {
 
   // default implementation with array of bytes
@@ -37,7 +39,7 @@ object Hashable {
   implicit lazy val bytesWithSHA512: Hashable[Array[Byte], Hash.SHA512.type] = (t: Array[Byte]) => hashArray(Hash.SHA512.name)(t)
 
   // hash third-party type T by transforming T into a hashable type U with hashing H
-  implicit def usingInjection[T, U, H <: Hash](implicit injection: Injection[T, U], hashable: Hashable[U, H]): Hashable[T, H] = { t: T =>
+  implicit def usingInjection[T, U, H <: Hash](implicit injection: Injection[T, U], hashable: Hashable[U, H]): Hashable[T, H] = { (t: T) =>
     if (injection.isAnonymized(t)) t
     else {
       val u = injection(t)
@@ -55,14 +57,15 @@ object Hashable {
   private type HashFunc[T] = T => T
 
   /**
-    * Hashes an array of bytes provided a hashing function name, as listed in
-    * <a href="{@docRoot }/../technotes/guides/security/StandardNames.html#MessageDigest">
-    * Java Cryptography Architecture Standard Algorithm Name Documentation</a>.
-    *
-    * @param hash hash name
-    * @return hashed string
-    */
-  private def hashArray(hash: String): HashFunc[Array[Byte]] = { arr: Array[Byte] =>
+   * Hashes an array of bytes provided a hashing function name, as listed in <a href="{@docRoot
+   * }/../technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography Architecture Standard Algorithm Name Documentation</a>.
+   *
+   * @param hash
+   *   hash name
+   * @return
+   *   hashed string
+   */
+  private def hashArray(hash: String): HashFunc[Array[Byte]] = { (arr: Array[Byte]) =>
     if (arr.length == 0) arr else java.security.MessageDigest.getInstance(hash).digest(arr)
   }
 }

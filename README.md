@@ -7,7 +7,7 @@ This library is built for Scala 2.12 and 2.13.
 
 ### SBT
 ```scala
-libraryDependencies += "org.sweet-delights" %% "delightful-anonymization" % "0.0.1"
+libraryDependencies += "org.sweet-delights" %% "delightful-anonymization" % "0.1.1"
 ```
 
 ### Maven
@@ -26,11 +26,10 @@ Please read files [`COPYING`](COPYING) and [`COPYING.LESSER`](COPYING.LESSER) fo
 
 ## How to anonymize a case class ?
 
-*Step 1*: decorate a case class with [`@PII`](src/main/scala/sweet/delights/anonymization/PII.scala) annotations.
+*Step 1*: decorate a case class with [`@PII`](src/main/scala-2/sweet/delights/anonymization/PII.scala) annotations.
 Example:
 ```scala
-import sweet.delights.anonymization.PII
-import sweet.delights.anonymization.Hash
+import sweet.delights.anonymization.{Hash, PII}
 
 case class Foo(
   opt: Option[String] @PII(Hash.MD5),
@@ -40,8 +39,9 @@ case class Foo(
 ```
 
 *Step 2*: apply the `anonymize` function on an instance of `Foo`:
+
 ```scala
-import sweet.delights.anonymization.Anonymizer._
+
 
 val foo = Foo(
   Some("opt"),
@@ -50,31 +50,36 @@ val foo = Foo(
 )
 
 val anonymized == Foo(
-  opt = Some("@-A9WeZjwa+awzqZSdEZNQWg=="),
-  str = "@-Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
-  integer = 1
+opt = Some("@-A9WeZjwa+awzqZSdEZNQWg==")
+,
+str = "@-Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg=="
+,
+integer = 1
 )
 //> true
 ```
 
 ## Supported types
 
-By default, [`Anonymizer`](src/main/scala/sweet/delights/anonymization/Anonymizer.scala) hashes arrays of bytes. But
+By default, [`Anonymizer`](src/main/scala-2/sweet/delights/anonymization/Anonymizer.scala) hashes arrays of bytes. But
 any type `T` - other than products and co-products - that can be transformed into an array of bytes can be hashed.
 
-The support for additional types is done via [`Injections`](src/main/scala/sweet/delights/anonymization/Injection.scala),
+The support for additional types is done via [`Injections`](src/main/scala-2/sweet/delights/anonymization/Injection.scala),
 a mechanism borrowed from the [`frameless`](https://github.com/typelevel/frameless) library.
 
 For example, support for strings is added with the following:
+
 ```scala
-import sweet.delights.anonymization.Injection
 import org.apache.commons.codec.binary.Base64
+import sweet.delights.anonymization.Injection
 
 lazy val anonymizedPrefix = "@:"
 
 implicit lazy val stringInjection: Injection[String, Array[Byte]] = new Injection[String, Array[Byte]] {
   override def isAnonymized(t: String): Boolean = t.startsWith(anonymizedPrefix)
+
   override def apply(t: String): Array[Byte] = t.getBytes("UTF-8")
+
   override def invert(u: Array[Byte]): String = anonymizedPrefix + Base64.encodeBase64String(u)
 }
 ```

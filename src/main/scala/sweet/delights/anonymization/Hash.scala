@@ -15,13 +15,13 @@
 package sweet.delights.anonymization
 
 /**
-  * Hash is a trait representating hashing functions like MD5, SHA1, etc.
-  */
+ * Hash is a trait representating hashing functions like MD5, SHA1, etc.
+ */
 sealed abstract class Hash(val name: String)
 
 /**
-  * Hash companion object with list of available hashing implementations in Java 8.
-  */
+ * Hash companion object with list of available hashing implementations in Java 8.
+ */
 object Hash {
   // list of hashing function supported listed at
   // https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
