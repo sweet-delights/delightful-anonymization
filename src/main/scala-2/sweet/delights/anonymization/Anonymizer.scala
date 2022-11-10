@@ -15,23 +15,21 @@
 package sweet.delights.anonymization
 
 import java.time.{LocalDate, LocalDateTime, LocalTime, ZonedDateTime}
-
-import shapeless.{:+:, ::, CNil, Coproduct, Generic, HList, HNil, Inl, Inr, Lazy, Poly1}
+import shapeless.{:+:, ::, CNil, Coproduct, Generic, HList, HNil, Inl, Inr, Lazy, Poly1, TypeAnnotations}
 import shapeless.ops.hlist.{Mapper, Zip}
 
 import scala.annotation.implicitNotFound
 import scala.reflect.runtime.universe._
 
 /**
-  * Anonymizer is a typeclass that anonymizes case classes with fields having
-  * a PII annotation. A field with type T is hashed using a hashing algorithm H
-  * if and only if T is hashable with H. This property is checked at compile time.
-  *
-  * The typeclass implementation uses the shapeless library (https://github.com/milessabin/shapeless)
-  * and help from Stack Overflow (https://stackoverflow.com/questions/54412106/shapeless-and-annotations)
-  *
-  * @tparam T
-  */
+ * Anonymizer is a typeclass that anonymizes case classes with fields having a PII annotation. A field with type T is hashed using a hashing algorithm H if and
+ * only if T is hashable with H. This property is checked at compile time.
+ *
+ * The typeclass implementation uses the shapeless library (https://github.com/milessabin/shapeless) and help from Stack Overflow
+ * (https://stackoverflow.com/questions/54412106/shapeless-and-annotations)
+ *
+ * @tparam T
+ */
 trait Anonymizer[T] {
 
   def anonymize(t: T): T
@@ -39,8 +37,8 @@ trait Anonymizer[T] {
 }
 
 /**
-  * Anonymizer companion object.
-  */
+ * Anonymizer companion object.
+ */
 object Anonymizer {
 
   private def create[T](func: T => T): Anonymizer[T] = (t: T) => func(t)
@@ -57,18 +55,16 @@ object Anonymizer {
 
   // Recursive Anonymizer for HLists
   implicit val hnilAnonymizer: Anonymizer[HNil] = create(identity)
-  implicit def hlistAnonymizer[H, T <: HList, AL <: HList](
-    implicit
+  implicit def hlistAnonymizer[H, T <: HList, AL <: HList](implicit
     hser: Lazy[Anonymizer[H]],
     tser: Anonymizer[T]
-  ): Anonymizer[H :: T] = create {
-    case h :: t => hser.value.anonymize(h) :: tser.anonymize(t)
+  ): Anonymizer[H :: T] = create { case h :: t =>
+    hser.value.anonymize(h) :: tser.anonymize(t)
   }
 
   // Recursive Anonymizer for Coproducts
   implicit val cnilAnonymizer: Anonymizer[CNil] = create(identity)
-  implicit def coproductAnonymizer[L, R <: Coproduct](
-    implicit
+  implicit def coproductAnonymizer[L, R <: Coproduct](implicit
     lser: Lazy[Anonymizer[L]],
     rser: Anonymizer[R]
   ): Anonymizer[L :+: R] = create {
@@ -80,18 +76,17 @@ object Anonymizer {
   // then the field is hashed. Otherwise, compilation fails
   object collector extends Poly1 {
     @implicitNotFound("could not find implicit")
-    implicit def someCase[F: TypeTag, H <: Hash](implicit hashable: Hashable[F, H]): Case.Aux[(F, Some[PII[H]]), F] = at {
-      case (field, Some(PII(_))) => hashable.hash(field)
+    implicit def someCase[F: TypeTag, H <: Hash](implicit hashable: Hashable[F, H]): Case.Aux[(F, Some[PII[H]]), F] = at { case (field, Some(PII(_))) =>
+      hashable.hash(field)
     }
 
-    implicit def noneCase[F]: Case.Aux[(F, None.type), F] = at {
-      case (field, None) => field
+    implicit def noneCase[F]: Case.Aux[(F, None.type), F] = at { case (field, None) =>
+      field
     }
   }
 
   // putting everything together
-  implicit def genericAnonymizer[T, HL <: HList, AL <: HList, ZL <: HList](
-    implicit
+  implicit def genericAnonymizer[T, HL <: HList, AL <: HList, ZL <: HList](implicit
     gen: Generic.Aux[T, HL],
     anonymizer: Lazy[Anonymizer[HL]],
     annotations: TypeAnnotations.Aux[PII[_], T, AL],
