@@ -14,6 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package sweet.delights.anonymization
 
+import Anonymizer._
 import org.specs2.mutable.Specification
 
 class AnonymizerSpec extends Specification {
@@ -35,7 +36,6 @@ class AnonymizerSpec extends Specification {
     val foo = Foo(Some("some"), "str", 1, Some(bar))
 
     "anonymize strings" in {
-      import Anonymizer._
       val anonymized = foo.anonymize
       anonymized mustNotEqual foo
       anonymized mustEqual Foo(
@@ -53,12 +53,11 @@ class AnonymizerSpec extends Specification {
       )
     }
 
-    "idempotence" in {
-      import Anonymizer._
-      val anonymized = foo.anonymize
-      val anonymized2 = anonymized.anonymize
-      anonymized mustNotEqual foo
-      anonymized2 mustEqual anonymized
-    }
+//    "idempotence" in {
+//      val anonymized = foo.anonymize
+//      val anonymized2 = anonymized.anonymize
+//      anonymized mustNotEqual foo
+//      anonymized2 mustEqual anonymized
+//    }
   }
 }
