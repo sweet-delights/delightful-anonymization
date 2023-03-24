@@ -26,16 +26,16 @@ libraryDependencies ++= {
   scalaBinaryVersion.value match {
     case "3" =>
       Seq(
-        "org.typelevel"  %% "shapeless3-deriving" % "3.2.0",
-        "commons-codec"  % "commons-codec" % "1.9",
-        "org.specs2"     %% "specs2-core"  % "4.15.0" % "test"
+        "org.typelevel" %% "shapeless3-deriving" % "3.2.0",
+        "commons-codec"  % "commons-codec"       % "1.9",
+        "org.specs2"    %% "specs2-core"         % "4.15.0" % "test"
       )
     case _ =>
       Seq(
         "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
         "commons-codec"  % "commons-codec" % "1.15",
-        "com.chuusai"    %% "shapeless"    % "2.3.10",
-        "org.specs2"     %% "specs2-core"  % "4.17.0" % "test"
+        "com.chuusai"   %% "shapeless"     % "2.3.10",
+        "org.specs2"    %% "specs2-core"   % "4.20.0"           % "test"
       )
   }
 }
