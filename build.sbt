@@ -35,7 +35,7 @@ libraryDependencies ++= {
         "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
         "commons-codec"  % "commons-codec" % "1.15",
         "com.chuusai"   %% "shapeless"     % "2.3.10",
-        "org.specs2"    %% "specs2-core"   % "4.17.0"           % "test"
+        "org.specs2"    %% "specs2-core"   % "4.19.1"           % "test"
       )
   }
 }
