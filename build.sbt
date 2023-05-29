@@ -3,7 +3,7 @@ import sbt.Keys.scalacOptions
 
 lazy val scala2_12 = "2.12.15"
 lazy val scala2_13 = "2.13.8"
-lazy val scala3 = "3.2.1"
+lazy val scala3 = "3.2.2"
 
 name := "delightful-anonymization"
 organization := "org.sweet-delights"
@@ -26,7 +26,7 @@ libraryDependencies ++= {
   scalaBinaryVersion.value match {
     case "3" =>
       Seq(
-        "org.typelevel" %% "shapeless3-deriving" % "3.2.0",
+        "org.typelevel" %% "shapeless3-deriving" % "3.3.0",
         "commons-codec"  % "commons-codec"       % "1.9",
         "org.specs2"    %% "specs2-core"         % "4.15.0" % "test"
       )
