@@ -2,7 +2,7 @@ import java.util.regex.Pattern
 import sbt.Keys.scalacOptions
 
 lazy val scala2_12 = "2.12.15"
-lazy val scala2_13 = "2.13.8"
+lazy val scala2_13 = "2.13.11"
 lazy val scala3 = "3.2.2"
 
 name := "delightful-anonymization"
