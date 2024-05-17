@@ -34,7 +34,7 @@ libraryDependencies ++= {
       Seq(
         "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
         "commons-codec"  % "commons-codec" % "1.16.0",
-        "com.chuusai"   %% "shapeless"     % "2.3.10",
+        "com.chuusai"   %% "shapeless"     % "2.3.11",
         "org.specs2"    %% "specs2-core"   % "4.20.4"           % "test"
       )
   }
