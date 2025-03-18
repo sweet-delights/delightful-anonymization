@@ -28,7 +28,7 @@ libraryDependencies ++= {
       Seq(
         "org.typelevel" %% "shapeless3-deriving" % "3.4.0",
         "commons-codec"  % "commons-codec"       % "1.9",
-        "org.specs2"    %% "specs2-core"         % "4.15.0" % "test"
+        "org.specs2"    %% "specs2-core"         % "4.21.0" % "test"
       )
     case _ =>
       Seq(
