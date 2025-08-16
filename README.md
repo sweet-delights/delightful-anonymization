@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/sweet-delights/delightful-anonymization.svg?branch=master)](https://travis-ci.com/sweet-delights/delightful-edifact)
+[![Build status](https://github.com/sweet-delights/delightful-anonymization/actions/workflows/scala.yml/badge.svg)](https://github.com/sweet-delights/delightful-anonymization/actions/workflows/scala.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/org.sweet-delights/delightful-anonymization_2.13.svg)](https://maven-badges.herokuapp.com/maven-central/org.sweet-delights/delightful-anonymization_2.13)
 
 `delightful-anonymization` is a library for anonymizing case classes on-the-fly.
