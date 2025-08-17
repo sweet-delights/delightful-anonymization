@@ -58,10 +58,10 @@ object Anonymizer {
   given optionAnonymizer[T](using anonymizer: Anonymizer[T]): Anonymizer[Option[T]] = (t: Option[T]) => t.map(anonymizer.anonymize)
   given listAnonymizer[T](using anonymizer: Anonymizer[T]): Anonymizer[List[T]] = (t: List[T]) => t.map(anonymizer.anonymize)
 
-  inline private def summonAll[T <: Tuple]: List[Anonymizer[_]] = {
+  inline private def summonElements[T <: Tuple]: List[Anonymizer[_]] = {
     inline compiletime.erasedValue[T] match {
       case _: EmptyTuple => Nil
-      case _: (t *: ts) => compiletime.summonInline[Anonymizer[t]] :: summonAll[ts]
+      case _: (t *: ts) => compiletime.summonInline[Anonymizer[t]] :: summonElements[ts]
     }
   }
 
@@ -70,24 +70,29 @@ object Anonymizer {
     case h :: tail => h *: toTuple(tail)
   }
 
-  inline given derived[T <: Product, AS <: Tuple](using
+  inline private def deriveProduct[T <: Product, AS <: Tuple](using
     m: Mirror.ProductOf[T],
     piiAnnotations: AllTypeAnnotations.Aux[T, AS],
     applyPii: ApplyPii[m.MirroredElemTypes, AS, EmptyTuple]
   ): Anonymizer[T] = {
-    val anonymizers = summonAll[m.MirroredElemTypes]
-    new Anonymizer[T] {
-      def anonymize(t: T): T = {
-        val tuple = Tuple.fromProduct(t)
-        val mapped = applyPii(tuple.asInstanceOf[m.MirroredElemTypes], piiAnnotations(), EmptyTuple).asInstanceOf[m.MirroredElemTypes]
-        val anonymized = anonymizers.zipWithIndex.map { case (anonymizer, i) =>
-          anonymizer.asInstanceOf[Anonymizer[Any]].anonymize(mapped.productElement(i))
-        }
-        val output = toTuple(anonymized)
-        m.fromTuple(output.asInstanceOf[m.MirroredElemTypes])
+    val anonymizers = summonElements[m.MirroredElemTypes]
+
+    (t: T) => {
+      val tuple = Tuple.fromProduct(t)
+      val mapped = applyPii(tuple.asInstanceOf[m.MirroredElemTypes], piiAnnotations(), EmptyTuple).asInstanceOf[m.MirroredElemTypes]
+      val anonymized = anonymizers.zipWithIndex.map { case (anonymizer, i) =>
+        anonymizer.asInstanceOf[Anonymizer[Any]].anonymize(mapped.productElement(i))
       }
+      val output = toTuple(anonymized)
+      m.fromTuple(output.asInstanceOf[m.MirroredElemTypes])
     }
   }
+
+  inline given derived[T <: Product, AS <: Tuple](using
+    m: Mirror.ProductOf[T],
+    piiAnnotations: AllTypeAnnotations.Aux[T, AS],
+    applyPii: ApplyPii[m.MirroredElemTypes, AS, EmptyTuple]
+  ): Anonymizer[T] = deriveProduct[T, AS]
 
   // utility class to implicitly add anonymize method of a type T
   extension [T](t: T) {

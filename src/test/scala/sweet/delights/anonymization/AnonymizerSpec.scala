@@ -37,20 +37,22 @@ class AnonymizerSpec extends Specification {
 
     "anonymize strings" in {
       val anonymized = foo.anonymize
-      anonymized mustNotEqual foo
-      anonymized mustEqual Foo(
-        opt = Some("@-A9WeZjwa+awzqZSdEZNQWg=="),
-        str = "@-Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
-        integer = 1,
-        more = Some(
-          Bar(
-            list = List(
-              "@-WeF0h3dEjGnea4ANejO7+5/xtGPkQ1TDVTvNucZm+pASWjx5+QOXvfX2oT3oKGhP",
-              "@-pNECuyo5tvHZ5IHvGha4lIoN8rWU/QMbrW8gH71rBlaEam5Yowqlf/NNkS59PqGF"
+      anonymized must not(beEqualTo(foo))
+      anonymized must beEqualTo {
+        Foo(
+          opt = Some("@-A9WeZjwa+awzqZSdEZNQWg=="),
+          str = "@-Ms3snktf//qQkCS0pxCFDuLhtNPxn/2PJImMPoQBmZes+h+d3Q39yiEojcksp2agyxDgzXstaSbe/+zMWSOVAg==",
+          integer = 1,
+          more = Some(
+            Bar(
+              list = List(
+                "@-WeF0h3dEjGnea4ANejO7+5/xtGPkQ1TDVTvNucZm+pASWjx5+QOXvfX2oT3oKGhP",
+                "@-pNECuyo5tvHZ5IHvGha4lIoN8rWU/QMbrW8gH71rBlaEam5Yowqlf/NNkS59PqGF"
+              )
             )
           )
         )
-      )
+      }
     }
 
 //    "idempotence" in {
