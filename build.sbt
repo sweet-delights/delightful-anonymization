@@ -3,7 +3,7 @@ import sbt.Keys.scalacOptions
 
 lazy val scala2_12 = "2.12.20"
 lazy val scala2_13 = "2.13.17"
-lazy val scala3 = "3.3.6"
+lazy val scala3 = "3.3.8"
 
 name := "delightful-anonymization"
 organization := "org.sweet-delights"
